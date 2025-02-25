@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-configmap
+data:
+  default.conf: | # отсюда и ниже это конфиг для Image
+    server {
+        listen 80 default_server;
+        server_name _;
+    
+        default_type text/plain;
+    
+        location / {
+            return 200 'MY-CONFIGMAP: $host\n';
+        }
+    }

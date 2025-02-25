@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 3  # Количество реплик Подов. Всегда держит такое количество
+  selector:
+    matchLabels:
+      app: my-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate # Бесшовное обновление
+  template:
+    metadata: # Отсюда и ниже это конфиг для Подов
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - image: news-parser:latest
+          name: news-parser
+          imagePullPolicy: IfNotPresent  # Используем локальный образ, вместо публичного (из Docker Hub)
+          env:
+            - name: TEST_1
+              value: qwerty
+            - name: TEST_2
+              valueFrom:
+                secretKeyRef:
+                  name: pwd89
+                  key: qwerty
+          ports:
+            - containerPort: 80 # Внутри сети кубера взаимодействие между Подами (как Expose в Docker)
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: 100m
+              memory: 500Mi
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/
+              name: config
+      volumes:
+        - name: config
+          configMap:
+            name: my-configmap

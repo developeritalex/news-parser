@@ -1,0 +1,35 @@
+### Create connector
+POST http://localhost:8083/connectors
+Content-Type: application/json
+
+{
+  "name": "news-outbox-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "snapshot.mode": "initial",
+    "slot.name": "news_outbox_slot",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "aleksandrtufanov",
+    "database.password": "",
+    "database.dbname": "news",
+    "database.server.name": "news-parser",
+    "table.include.list": "public.outbox",
+    "topic.prefix": "news",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter.schemas.enable": "false",
+    "tombstones.on.delete": "false",
+
+    "transforms": "extractKeyField,extractValueField,routeByField",
+    "transforms.extractKeyField.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.extractKeyField.field": "id",
+    "transforms.extractValueField.type": "org.apache.kafka.connect.transforms.ExtractField$Value",
+    "transforms.extractValueField.field": "after",
+    "transforms.routeByField.type": "io.debezium.transforms.outbox.EventRouter",
+    "transforms.routeByField.route.by.field": "aggregate_type",
+    "transforms.routeByField.route.topic.replacement": "Topic-1"
+  }
+}

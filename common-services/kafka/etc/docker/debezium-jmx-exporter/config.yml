@@ -1,0 +1,5 @@
+# config.yml example for JMX Exporter
+jmx_url: service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi
+lowercase_output_name: true
+lowercase_output_labelnames: true
+# Добавь нужные метрики и настройки здесь

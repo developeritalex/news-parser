@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  ingressClassName: "nginx" #Стандартно. Не менять. Даже если изменится Image
+  rules:
+    - host: kubernetes.docker.internal # у меня это localhost. В файле hosts прописать 127.0.0.1 kubernetes.docker.internal. Папка private/etc/hosts
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: my-service
+                port:
+                  number: 80
