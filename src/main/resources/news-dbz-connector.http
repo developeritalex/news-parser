@@ -12,11 +12,11 @@ Content-Type: application/json
     "database.hostname": "postgres",
     "database.port": "5432",
     "database.user": "aleksandrtufanov",
-    "database.password": "",
+    "database.password": "mysecretpassword",
     "database.dbname": "news",
     "database.server.name": "news-parser",
     "table.include.list": "public.outbox",
-    "topic.prefix": "news",
+    "topic.prefix": "prefix-news",
     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
     "key.converter.schemas.enable": "false",
@@ -30,6 +30,6 @@ Content-Type: application/json
     "transforms.extractValueField.field": "after",
     "transforms.routeByField.type": "io.debezium.transforms.outbox.EventRouter",
     "transforms.routeByField.route.by.field": "aggregate_type",
-    "transforms.routeByField.route.topic.replacement": "Topic-1"
+    "transforms.routeByField.route.topic.replacement": "topic-1"
   }
 }

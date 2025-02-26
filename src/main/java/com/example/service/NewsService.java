@@ -9,6 +9,7 @@ public interface NewsService {
     List<NewsDTO> getNewsToday();
     List<NewsDTO> getNewsYesterday();
     List<NewsDTO> getNewsByKeyword(String keyword);
-    boolean deleteNewsById(Long id);
-    boolean deleteNewsByKeyword(String keyword);
+    void deleteNewsById(Long id);
+    void deleteNewsByKeyword(String keyword);
+    NewsDTO addNews(NewsDTO newsDTO);
 }

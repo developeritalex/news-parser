@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.dto.NewsDTO;
 import com.example.service.NewsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,22 +36,18 @@ public class NewsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteNewsById(@PathVariable Long id) {
-        boolean isDeleted = service.deleteNewsById(id);
-        if (isDeleted) {
-            return ResponseEntity.ok("News with ID " + id + " has been deleted successfully.");
-        } else {
-            return ResponseEntity.status(404).body("News with ID " + id + " not found.");
-        }
+    public void deleteNewsById(@PathVariable Long id) {
+        service.deleteNewsById(id);
     }
 
     @DeleteMapping("/by-keyword/{keyword}")
-    public ResponseEntity<String> deleteNewsByKeyword(@PathVariable String keyword) {
-        boolean isDeleted = service.deleteNewsByKeyword(keyword);
-        if (isDeleted) {
-            return ResponseEntity.ok("News with keyword \"" + keyword + "\" has been deleted successfully.");
-        } else {
-            return ResponseEntity.status(404).body("No news found with keyword \"" + keyword + "\".");
-        }
+    public void deleteNewsByKeyword(@PathVariable String keyword) {
+        service.deleteNewsByKeyword(keyword);
+    }
+
+    @PostMapping()
+    public ResponseEntity<NewsDTO> addNews(@RequestBody NewsDTO newsDTO) {
+        NewsDTO addedNews = service.addNews(newsDTO);
+        return new ResponseEntity<>(addedNews, HttpStatus.CREATED);
     }
 }

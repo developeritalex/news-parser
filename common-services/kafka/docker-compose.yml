@@ -7,7 +7,7 @@ services:
       context: ../..
       dockerfile: common-services/kafka/Dockerfile
     image: news-parser:latest
-    container_name: parse-container
+    container_name: ms-parser
     ports:
       - "8080:8080"
     environment:
@@ -22,12 +22,11 @@ services:
   postgres:
     image: postgres:17.4
     hostname: postgres
-    container_name: postgres-container
+    container_name: postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: aleksandrtufanov
       POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_DB: news
     ports:
       - "5432:5432"
@@ -37,7 +36,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.2.1
     hostname: zookeeper
-    container_name: news_zookeeper-container
+    container_name: zookeeper
     restart: unless-stopped
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -49,7 +48,7 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.2.1
     hostname: kafka
-    container_name: news_kafka-container
+    container_name: kafka
     restart: unless-stopped
     depends_on:
       - zookeeper
@@ -72,7 +71,7 @@ services:
 
   init-kafka:
     image: confluentinc/cp-kafka:7.2.1
-    container_name: news_debezium_init_kafka-container
+    container_name: debezium_init_kafka
     depends_on:
       kafka:
         condition: service_healthy
@@ -84,7 +83,7 @@ services:
   # Добавляем Kafka UI для мониторинга
   kafka-ui:
     image: provectuslabs/kafka-ui:v0.7.2
-    container_name: news_kafka_ui-container
+    container_name: kafka_ui
     restart: unless-stopped
     depends_on:
       kafka:
@@ -102,8 +101,8 @@ services:
       context: /Users/aleksandrtufanov/IdeaProjects/news-parser
       dockerfile: common-services/kafka/Dockerfile
       args:
-        JMX_AGENT_VERSION: 0.15.0
-    container_name: news_debezium_connect-container
+        JMX_AGENT_VERSION: 0.17.2
+    container_name: debezium_connect
     restart: unless-stopped
     ports:
       - "8083:8083"
@@ -131,7 +130,7 @@ services:
   # Добавляем Prometheus
   prometheus:
     image: prom/prometheus:v2.43.0
-    container_name: news_debezium_prometheus-container
+    container_name: debezium_prometheus
     restart: unless-stopped
     ports:
       - "9090:9090"
@@ -145,7 +144,7 @@ services:
   grafana:
     build:
       context: ./etc/docker/debezium-grafana
-    container_name: news_debezium_grafana-container
+    container_name: debezium_grafana
     restart: unless-stopped
     ports:
       - "3000:3000"

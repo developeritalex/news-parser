@@ -63,23 +63,31 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public boolean deleteNewsById(Long id) {
-        if (newsRepository.existsById(id)) {
-            newsRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteNewsById(Long id) {
+        outboxRepository.deleteById(id);
     }
 
     @Override
-    @Transactional
-    public boolean deleteNewsByKeyword(String keyword) {
+    public void deleteNewsByKeyword(String keyword) {
         List<News> list = newsRepository.findByKeywordsContainingIgnoreCase(keyword);
-        if (list.isEmpty()) {
-            return false;
-        }
         newsRepository.deleteAll(list);
-        return true;
+    }
+
+    @Transactional
+    @Override
+    public NewsDTO addNews(NewsDTO newsDTO) {
+        // Преобразуем NewsDTO в NewsEntity с помощью маппера
+        News newsEntity = mapper.toEntity(newsDTO);
+        // Сохраняем новость в основной таблице
+        News savedEntityNews = newsRepository.save(newsEntity);
+        // Сохраняем новость в таблице Outbox
+        Outbox outboxEntity = new Outbox();
+        outboxEntity.setTime(newsEntity.getTime());
+        outboxEntity.setKeywords(newsEntity.getKeywords());
+        outboxEntity.setText(newsEntity.getText());
+        Outbox savedEntityOutbox = outboxRepository.save(outboxEntity);
+        // Возвращаем DTO из сохранённой сущности News
+        return mapper.toDto(savedEntityNews);
     }
 
 }
