@@ -45,7 +45,7 @@ public class ParserNewsTask {
             Elements times = doc.getElementsByClass("tgme_widget_message_date");
 
             Set<String> uniqueEntries = new HashSet<>();
-            for (int i = 0; i < texts.size(); i++) {
+            for (int i = 0; i < Math.min(texts.size(), times.size()); i++) {
                 Element newsElement = texts.get(i);
                 String text = newsElement.text();
                 String time = times.get(i).text();

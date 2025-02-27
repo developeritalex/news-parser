@@ -22,7 +22,7 @@ services:
   postgres:
     image: postgres:17.4
     hostname: postgres
-    container_name: postgres
+    container_name: postgres-container
     restart: unless-stopped
     environment:
       POSTGRES_USER: aleksandrtufanov
@@ -150,3 +150,6 @@ services:
       - "3000:3000"
     environment:
       - DS_PROMETHEUS=prometheus
+
+volumes:
+  postgres_data:
