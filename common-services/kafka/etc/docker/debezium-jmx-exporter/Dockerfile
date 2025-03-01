@@ -1,17 +1,8 @@
-FROM openjdk:17-jdk-slim
+FROM debezium/connect:2.6.2.Final
 
-# Устанавливаем рабочую директорию
-WORKDIR /kafka
+ARG JMX_AGENT_VERSION
+RUN mkdir /kafka/etc && cd /kafka/etc &&\
+        curl -so jmx_prometheus_javaagent.jar \
+        https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/$JMX_AGENT_VERSION/jmx_prometheus_javaagent-$JMX_AGENT_VERSION.jar
 
-# Копируем JMX Exporter и конфиг
-# Предполагается, что файл jmx_prometheus_javaagent.jar находится в директории,
-# которая является частью контекста сборки.
-RUN ls -l ./etc/docker/debezium-jmx-exporter
-COPY ./etc/docker/debezium-jmx-exporter/jmx_prometheus_javaagent-0.17.2.jar /kafka/jmx_prometheus_javaagent.jar
-COPY /Users/aleksandrtufanov/IdeaProjects/news-parser/common-services/kafka/etc/docker/debezium-jmx-exporter/config.yml /kafka/config.yml
-
-# Указываем порт для JMX Exporter
-EXPOSE 8080
-
-# Запускаем JMX Exporter
-CMD ["java", "-javaagent:/kafka/jmx_prometheus_javaagent.jar=8080:/kafka/config.yml"]
+COPY config.yml /kafka/etc/config.yml

@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-into-table-outbox
+      author: alex-tufanov
+      changes:
+        - insert:
+            tableName: outbox
+            columns:
+              - column:
+                  name: time
+                  valueComputed: NOW()
+              - column:
+                  name: keywords
+                  value: #укажи свои тестовые данные
+              - column:
+                  name: text
+                  value: #укажи свои тестовые данные

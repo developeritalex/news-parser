@@ -76,17 +76,13 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     @Override
     public NewsDTO addNews(NewsDTO newsDTO) {
-        // Преобразуем NewsDTO в NewsEntity с помощью маппера
         News newsEntity = mapper.toEntity(newsDTO);
-        // Сохраняем новость в основной таблице
         News savedEntityNews = newsRepository.save(newsEntity);
-        // Сохраняем новость в таблице Outbox
         Outbox outboxEntity = new Outbox();
         outboxEntity.setTime(newsEntity.getTime());
         outboxEntity.setKeywords(newsEntity.getKeywords());
         outboxEntity.setText(newsEntity.getText());
         Outbox savedEntityOutbox = outboxRepository.save(outboxEntity);
-        // Возвращаем DTO из сохранённой сущности News
         return mapper.toDto(savedEntityNews);
     }
 
