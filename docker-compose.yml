@@ -4,8 +4,8 @@ services:
   # Существующий микросервис news-parser
   app:
     build:
-      context: ../..
-      dockerfile: common-services/kafka/Dockerfile
+      context: .
+      dockerfile: Dockerfile
     image: news-parser:latest
     container_name: ms-parser
     ports:
@@ -15,28 +15,29 @@ services:
       SPRING_DATASOURCE_USERNAME: aleksandrtufanov
       SPRING_DATASOURCE_PASSWORD: mysecretpassword
     depends_on:
-      - postgres
+      - db
       - kafka
 
   # Существующая база данных PostgreSQL
-  postgres:
-    image: postgres:17.4
+  db:
+    image: postgres:14.2
     hostname: postgres
     container_name: postgres-container
     restart: unless-stopped
     environment:
+      POSTGRES_DB: news
       POSTGRES_USER: aleksandrtufanov
       POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: news
     ports:
       - "5432:5432"
-    command: ["postgres", "-c", "log_statement=all", "-c", "wal_level=logical", "-c", "max_replication_slots=4"]
+    command: [ "postgres", "-c", "log_statement=all", "-c", "wal_level=logical",
+               "-c", "max_replication_slots=4" ]
 
   # Добавляем Zookeeper для Kafka
   zookeeper:
     image: confluentinc/cp-zookeeper:7.2.1
     hostname: zookeeper
-    container_name: zookeeper
+    container_name: debezium_zookeeper
     restart: unless-stopped
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -48,7 +49,7 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.2.1
     hostname: kafka
-    container_name: kafka
+    container_name: debezium_kafka
     restart: unless-stopped
     depends_on:
       - zookeeper
@@ -64,7 +65,7 @@ services:
     ports:
       - "9092:9092"
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 29092"]
+      test: [ "CMD-SHELL", "nc -z localhost 29092" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -77,13 +78,13 @@ services:
         condition: service_healthy
     entrypoint: [ '/bin/sh', '-c' ]
     volumes:
-      - ./etc/docker/kafka/init-kafka-topics.sh:/init-kafka-topics.sh
+      - ./common-services/etc/docker/kafka/init-kafka-topics.sh:/init-kafka-topics.sh
     command: /init-kafka-topics.sh
 
   # Добавляем Kafka UI для мониторинга
   kafka-ui:
     image: provectuslabs/kafka-ui:v0.7.2
-    container_name: kafka_ui
+    container_name: debezium_kafka_ui
     restart: unless-stopped
     depends_on:
       kafka:
@@ -91,17 +92,16 @@ services:
     ports:
       - "9000:8080"
     environment:
-      KAFKA_CLUSTERS_0_NAME: news
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
-      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      DYNAMIC_CONFIG_ENABLED: true
+    volumes:
+      - ./common-services/etc/docker/kafka/config.yml:/etc/kafkaui/dynamic_config.yaml
 
   # Добавляем Kafka Connect с Debezium
   kafka-connect:
     build:
-      context: /Users/aleksandrtufanov/IdeaProjects/news-parser
-      dockerfile: common-services/kafka/Dockerfile
+      context: ./common-services/etc/docker/debezium-jmx-exporter
       args:
-        JMX_AGENT_VERSION: 0.17.2
+        JMX_AGENT_VERSION: 0.15.0
     container_name: debezium_connect
     restart: unless-stopped
     ports:
@@ -110,7 +110,7 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
-      postgres:
+      db:
         condition: service_started
     environment:
       - BOOTSTRAP_SERVERS=kafka:29092
@@ -138,12 +138,12 @@ services:
       kafka-connect:
         condition: service_healthy
     volumes:
-      - ./etc/docker/debezium-prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./common-services/etc/docker/debezium-prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   # Добавляем Grafana
   grafana:
     build:
-      context: ./etc/docker/debezium-grafana
+      context: ./common-services/etc/docker/debezium-grafana
     container_name: debezium_grafana
     restart: unless-stopped
     ports:
