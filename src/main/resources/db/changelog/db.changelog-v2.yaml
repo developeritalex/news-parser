@@ -11,7 +11,7 @@ databaseChangeLog:
                   valueComputed: NOW()
               - column:
                   name: keywords
-                  value: #укажи свои тестовые данные
+                  value: any keyword #укажи свои тестовые данные
               - column:
                   name: text
-                  value: #укажи свои тестовые данные
+                  value: any news #укажи свои тестовые данные
