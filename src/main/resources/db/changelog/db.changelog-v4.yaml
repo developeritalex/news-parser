@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-dbz-signal
+      author: alex-tufanov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              schemaName: public
+              tableName: dbz_signal
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: dbz_signal
+            columns:
+              - column:
+                  name: id
+                  type: varchar(64)
+              - column:
+                  name: type
+                  type: varchar(32)
+              - column:
+                  name: data
+                  type: varchar(2048)
+
+  - changeSet:
+      id: create-table-dbz-heartbeat
+      author: alex-tufanov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              schemaName: public
+              tableName: dbz_heartbeat
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: dbz_heartbeat
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: ts
+                  type: timestamp
+                  defaultValueComputed: current_timestamp

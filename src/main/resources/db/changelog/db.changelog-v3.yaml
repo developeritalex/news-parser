@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: set-replica-identity-full-for-sport
+      author: alex-tufanov
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: alter table custom.sport replica identity full;
+
+  - changeSet:
+      id: set-replica-identity-full-for-category
+      author: alex-tufanov
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: alter table custom.category replica identity full;

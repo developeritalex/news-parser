@@ -1,17 +1,122 @@
 databaseChangeLog:
   - changeSet:
-      id: insert-into-table-outbox
+      id: create-schema-custom
+      author: alex-tufanov
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: CREATE SCHEMA IF NOT EXISTS custom;
+
+  - changeSet:
+      id: create-table-sport
+      author: alex-tufanov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              schemaName: custom
+              tableName: sport
+      changes:
+        - createTable:
+            schemaName: custom
+            tableName: sport
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: status
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: insert-into-table-sport
       author: alex-tufanov
       changes:
         - insert:
-            tableName: outbox
+            schemaName: custom
+            tableName: sport
+            columns:
+              - column: { name: id, value: '1' }
+              - column: { name: code, value: 'FOOTBALL' }
+              - column: { name: status, value: 'OPENED' }
+        - insert:
+            schemaName: custom
+            tableName: sport
+            columns:
+              - column: { name: id, value: '2' }
+              - column: { name: code, value: 'BASKETBALL' }
+              - column: { name: status, value: 'OPENED' }
+
+  - changeSet:
+      id: create-table-category
+      author: alex-tufanov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              schemaName: custom
+              tableName: category
+      changes:
+        - createTable:
+            schemaName: custom
+            tableName: category
             columns:
               - column:
-                  name: time
-                  valueComputed: NOW()
+                  name: id
+                  type: bigint
+                  constraints:
+                    nullable: false
               - column:
-                  name: keywords
-                  value: any keyword #укажи свои тестовые данные
+                  name: sport_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_category_sport
+                    references: custom.sport(id)
               - column:
-                  name: text
-                  value: any news #укажи свои тестовые данные
+                  name: code
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: status
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+            primaryKey:
+              columnNames: id, sport_id
+              tableName: category
+              schemaName: custom
+
+  - changeSet:
+      id: insert-into-table-category
+      author: alex-tufanov
+      changes:
+        - insert:
+            schemaName: custom
+            tableName: category
+            columns:
+              - column: { name: id, value: '1' }
+              - column: { name: sport_id, value: '1' }
+              - column: { name: code, value: 'RU' }
+              - column: { name: status, value: 'OPENED' }
+        - insert:
+            schemaName: custom
+            tableName: category
+            columns:
+              - column: { name: id, value: '2' }
+              - column: { name: sport_id, value: '1' }
+              - column: { name: code, value: 'EN' }
+              - column: { name: status, value: 'OPENED' }

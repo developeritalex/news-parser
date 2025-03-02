@@ -1,35 +1,72 @@
 databaseChangeLog:
   - changeSet:
-      id: create-table-outbox
+      id: create-table-user
       author: alex-tufanov
       preConditions:
         - onFail: MARK_RAN
         - not:
             tableExists:
-              tableName: outbox
+              schemaName: marketing
+              tableName: user
       changes:
+        - sql:
+            dbms: postgresql
+            sql: CREATE SCHEMA IF NOT EXISTS marketing;
         - createTable:
-            tableName: outbox
+            schemaName: marketing
+            tableName: user
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: bigserial
                   constraints:
                     primaryKey: true
+                    generatedValue:
+                      type: identity
+              - column:
+                  name: first_name
+                  type: varchar(255)
+                  constraints:
                     nullable: false
               - column:
-                  name: time
+                  name: last_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: income
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
                   type: timestamp
                   constraints:
                     nullable: false
               - column:
-                  name: keywords
-                  type: text
+                  name: updated_at
+                  type: timestamp
                   constraints:
                     nullable: false
-              - column:
-                  name: text
-                  type: text
-                  constraints:
-                    nullable: false
-                    unique: true
+  - changeSet:
+      id: insert-into-table-user
+      author: alex-tufanov
+      changes:
+        - insert:
+            schemaName: marketing
+            tableName: user
+            columns:
+              - column: { name: first_name, value: 'Zhenya' }
+              - column: { name: last_name, value: 'Yefimenka' }
+              - column: { name: income, value: '100' }
+              - column: { name: created_at, valueComputed: 'now()' }
+              - column: { name: updated_at, valueComputed: 'now()' }
+        - insert:
+            schemaName: marketing
+            tableName: user
+            columns:
+              - column: { name: first_name, value: 'Nikolay' }
+              - column: { name: last_name, value: 'Ivanov' }
+              - column: { name: income, value: '100' }
+              - column: { name: created_at, valueComputed: 'now()' }
+              - column: { name: updated_at, valueComputed: 'now()' }

@@ -150,6 +150,3 @@ services:
       - "3000:3000"
     environment:
       - DS_PROMETHEUS=prometheus
-
-volumes:
-  postgres_data:
