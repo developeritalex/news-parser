@@ -13,9 +13,9 @@ Content-Type: application/json
 
     "database.hostname": "postgres",
     "database.port": "5432",
-    "database.user": "demo-debezium",
-    "database.password": "demo-debezium",
-    "database.dbname" : "demo-debezium",
+    "database.user": "aleksandrtufanov",
+    "database.password": "mysecretpassword",
+    "database.dbname" : "news",
     "database.server.name": "postgres",
     "table.include.list": "public.dbz_signal,public.dbz_heartbeat,custom.sport",
 
