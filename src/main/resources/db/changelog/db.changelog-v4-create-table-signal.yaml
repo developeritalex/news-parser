@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-signal
+      author: alex-tufanov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              schemaName: public
+              tableName: dbz_signal
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: dbz_signal
+            columns:
+              - column:
+                  name: id
+                  type: varchar(64)
+              - column:
+                  name: type
+                  type: varchar(32)
+              - column:
+                  name: data
+                  type: varchar(2048)

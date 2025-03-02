@@ -1,11 +1,21 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/db.changelog-v0.yaml
+      file: db/changelog/db.changelog-v0.0-create-db.yaml
   - include:
-      file: db/changelog/db.changelog-v1.yaml
+      file: db/changelog/db.changelog-v0.1-create-table-newz.yaml
   - include:
-      file: db/changelog/db.changelog-v2.yaml
+      file: db/changelog/db.changelog-v0.1-create-table-outbox.yaml
   - include:
-      file: db/changelog/db.changelog-v3.yaml
+      file: db/changelog/db.changelog-v1-create-table-user.yaml
   - include:
-      file: db/changelog/db.changelog-v4.yaml
+      file: db/changelog/db.changelog-v2-create-table-sport-table-category.yaml
+  - include:
+      file: db/changelog/db.changelog-v3-replica-identity-full.yaml
+  - include:
+      file: db/changelog/db.changelog-v4-create-table-heartbeat.yaml
+  - include:
+      file: db/changelog/db.changelog-v4-create-table-signal.yaml
+  - include:
+      file: db/changelog/db.changelog-v5.0-insert-signal.yaml
+  - include:
+      file: db/changelog/db.changelog-v5.1-insert-signal-with-conditions.yaml

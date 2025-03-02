@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-dbz-signal
+      author: alex-tufanov
+      changes:
+        - insert:
+            schemaName: public
+            tableName: dbz_signal
+            columns:
+              - column: { name: id, value: 'signal-1' }
+              - column: { name: type, value: 'execute-snapshot' }
+              - column: { name: data, value: '{"data-collections": ["custom.category"]}' }

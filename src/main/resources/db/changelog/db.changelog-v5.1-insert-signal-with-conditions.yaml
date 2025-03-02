@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-signal-with-conditions
+      author: alex-tufanov
+      changes:
+        - insert:
+            schemaName: public
+            tableName: dbz_signal
+            columns:
+              - column:
+                  name: id
+                  value: 'signal-2'
+              - column:
+                  name: type
+                  value: 'execute-snapshot'
+              - column:
+                  name: data
+                  value: '{"data-collections": ["custom.category"], "additional-conditions":[{"data-collection": "custom.category", "filter": "status=''FINISHED''"}]}'

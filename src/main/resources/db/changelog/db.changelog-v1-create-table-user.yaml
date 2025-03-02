@@ -11,7 +11,7 @@ databaseChangeLog:
       changes:
         - sql:
             dbms: postgresql
-            sql: CREATE SCHEMA IF NOT EXISTS marketing;
+            sql: CREATE SCHEMA IF NOT EXISTS custom;
         - createTable:
             schemaName: marketing
             tableName: user
@@ -48,6 +48,7 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: false
+
   - changeSet:
       id: insert-into-table-user
       author: alex-tufanov

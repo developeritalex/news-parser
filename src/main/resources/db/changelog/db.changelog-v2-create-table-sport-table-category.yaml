@@ -38,10 +38,14 @@ databaseChangeLog:
                   type: varchar(30)
                   constraints:
                     nullable: false
-
   - changeSet:
       id: insert-into-table-sport
       author: alex-tufanov
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            schemaName: custom
+            tableName: sport
       changes:
         - insert:
             schemaName: custom
@@ -56,7 +60,7 @@ databaseChangeLog:
             columns:
               - column: { name: id, value: '2' }
               - column: { name: code, value: 'BASKETBALL' }
-              - column: { name: status, value: 'OPENED' }
+              - column: { name: status, value: 'FINISHED' }
 
   - changeSet:
       id: create-table-category

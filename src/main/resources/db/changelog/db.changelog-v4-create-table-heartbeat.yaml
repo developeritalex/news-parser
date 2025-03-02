@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-heartbeat
+      author: alex-tufanov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              schemaName: public
+              tableName: dbz_heartbeat
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: dbz_heartbeat
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: ts
+                  type: timestamp
+                  defaultValueComputed: current_timestamp

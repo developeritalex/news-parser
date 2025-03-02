@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: set-replica-identity-full-for-sport
+      id: replica-identity-full-table-sport
       author: alex-tufanov
       changes:
         - sql:
@@ -8,7 +8,7 @@ databaseChangeLog:
             sql: alter table custom.sport replica identity full;
 
   - changeSet:
-      id: set-replica-identity-full-for-category
+      id: replica-identity-full-table-category
       author: alex-tufanov
       changes:
         - sql:
