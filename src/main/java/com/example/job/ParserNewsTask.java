@@ -6,12 +6,16 @@ import com.example.entity.Outbox;
 import com.example.mapper.NewsMapper;
 import com.example.repository.NewsRepository;
 import com.example.repository.OutboxRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +35,8 @@ public class ParserNewsTask {
     private final NewsRepository newsRepository;
     private final NewsMapper mapper;
     private final OutboxRepository outboxRepository;
+
+    private RetryTemplate retryTemplate;
 
     @Transactional
     //@Scheduled(cron = "0 0 11,16,20 * * *")
@@ -66,14 +72,14 @@ public class ParserNewsTask {
                             newsDTO.setKeywords(foundKeywords.toString());
                             newsDTO.setText(text);
                             News newz = mapper.toEntity(newsDTO);
-                            newsRepository.saveAndFlush(newz);
+                            newsRepository.save(newz);
 
                             if (!outboxRepository.existsByText(text)) {
                                 Outbox outbox = new Outbox();
                                 outbox.setTime(newz.getTime());
                                 outbox.setKeywords(newz.getKeywords());
                                 outbox.setText(newz.getText());
-                                outboxRepository.saveAndFlush(outbox);
+                                outboxRepository.save(outbox);
                             }
                         }
                     }
