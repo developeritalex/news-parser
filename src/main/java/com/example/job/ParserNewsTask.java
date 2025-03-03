@@ -15,7 +15,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +34,6 @@ public class ParserNewsTask {
     private final NewsRepository newsRepository;
     private final NewsMapper mapper;
     private final OutboxRepository outboxRepository;
-
-    private RetryTemplate retryTemplate;
 
     @Transactional
     //@Scheduled(cron = "0 0 11,16,20 * * *")
