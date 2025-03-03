@@ -1,5 +1,13 @@
 databaseChangeLog:
   - changeSet:
+      id: create-schema-marketing
+      author: alex-tufanov
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: CREATE SCHEMA IF NOT EXISTS marketing;
+
+  - changeSet:
       id: create-table-user
       author: alex-tufanov
       preConditions:
@@ -9,9 +17,6 @@ databaseChangeLog:
               schemaName: marketing
               tableName: user
       changes:
-        - sql:
-            dbms: postgresql
-            sql: CREATE SCHEMA IF NOT EXISTS custom;
         - createTable:
             schemaName: marketing
             tableName: user
@@ -48,7 +53,6 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: false
-
   - changeSet:
       id: insert-into-table-user
       author: alex-tufanov
