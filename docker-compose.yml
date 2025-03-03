@@ -10,10 +10,8 @@ services:
     container_name: ms-parser
     ports:
       - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/news
-      SPRING_DATASOURCE_USERNAME: aleksandrtufanov
-      SPRING_DATASOURCE_PASSWORD: mysecretpassword
+    env_file:
+      - .env
     depends_on:
       - db
       - kafka
@@ -24,10 +22,8 @@ services:
     hostname: postgres
     container_name: postgres-container
     restart: unless-stopped
-    environment:
-      POSTGRES_DB: news
-      POSTGRES_USER: aleksandrtufanov
-      POSTGRES_PASSWORD: mysecretpassword
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     command: [ "postgres", "-c", "log_statement=all", "-c", "wal_level=logical",
