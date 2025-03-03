@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# В реальных проектах чаще всего отправка events именно через Kafka,
+# а не DB, так как у разработчиков нет доступа к DB в продакшне.
+
 # Параметры Kafka
 BOOTSTRAP_SERVER="localhost:9092"
 TOPIC="pgsql.demo.kafka.signal"
