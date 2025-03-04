@@ -36,7 +36,6 @@ public class ParserNewsTask {
     private final OutboxRepository outboxRepository;
 
     @Transactional
-    //@Scheduled(cron = "0 0 11,16,20 * * *")
     @Scheduled(fixedDelay = 3_600_000) //раз в час
     public void parseAndSave() {
         try {
