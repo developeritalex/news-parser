@@ -19,7 +19,7 @@ build:
   except:
     - tags
   script:
-    - 'mvn --settings $MAVEN_SETTINGS compile'
+    - 'mvn --settings /root/.m2/settings.xml compile'
   cache:
     paths:
       - ./target
