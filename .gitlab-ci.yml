@@ -19,7 +19,7 @@ build:
   except:
     - tags
   script:
-    - 'mvn --settings /root/.m2/settings-docker.xml compile'
+    - 'mvn --settings $MAVEN_SETTINGS compile'
   cache:
     paths:
       - ./target
