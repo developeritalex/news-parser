@@ -19,6 +19,8 @@ build:
   except:
     - tags
   script:
+    - 'ls -la ~/.m2'
+    - 'cat ~/.m2/settings.xml'
     - 'mvn --settings $MAVEN_SETTINGS compile'
   cache:
     paths:
