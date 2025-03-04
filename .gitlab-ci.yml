@@ -1,0 +1,90 @@
+stages:
+  - build
+  - test
+  - package
+  - save_nexus
+  - deploy
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
+
+image: maven:latest
+
+build:
+  stage: build
+  only:
+    - develop
+    - merge_requests
+    - /^release\/.*$/
+  except:
+    - tags
+  script:
+    - 'mvn --settings $MAVEN_SETTINGS compile'
+  cache:
+    paths:
+      - ./target
+      - ./.m2
+
+test:
+  stage: test
+  only:
+    - develop
+    - merge_requests
+    - /^release\/.*$/
+  except:
+    - tags
+  script:
+    - 'mvn --settings $MAVEN_SETTINGS test'
+  cache:
+    paths:
+      - ./target
+      - ./.m2
+
+package:
+  stage: package
+  only:
+    - develop
+    - /^release\/.*$/
+  except:
+    - tags
+  script:
+    - 'mvn --settings $MAVEN_SETTINGS package -Dmaven.test.skip=true'
+  artifacts:
+    paths:
+      - target/*.jar
+  cache:
+    policy: pull
+    paths:
+      - ./target
+      - ./.m2
+
+docker_push_dev_nexus:
+  image: docker:20.10.7
+  stage: save_nexus
+  only:
+    - develop
+  except:
+    - tags
+  before_script:
+    - echo "$DOCKER_DEV_PASS" | docker login localhost:8183 --username user --password-stdin
+  script:
+    - docker build --no-cache -f Dockerfile-dev -t localhost:8183/repository/nexus-docker-images:latest .
+    - docker push localhost:8183/repository/nexus-docker-images:latest
+    - docker image rm localhost:8183/repository/nexus-docker-images:latest
+
+deploy_dev_server:
+  stage: deploy
+  only:
+    - develop
+  except:
+    - tags
+  before_script:
+    - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $DEV_HOST >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh $DEV_USER@$DEV_HOST -t 'bash -ci "update-app"'
