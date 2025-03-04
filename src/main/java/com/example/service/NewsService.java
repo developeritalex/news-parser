@@ -4,7 +4,6 @@ import com.example.dto.NewsDTO;
 import java.util.List;
 
 public interface NewsService {
-
     List<NewsDTO> getAllNews();
     List<NewsDTO> getNewsToday();
     List<NewsDTO> getNewsYesterday();
