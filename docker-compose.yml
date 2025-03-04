@@ -1,7 +1,7 @@
 name: news-system
 
 services:
-  # Существующий микросервис news-parser
+  # Микросервис news-parser
   app:
     build:
       context: .
@@ -16,7 +16,7 @@ services:
       - db
       - kafka
 
-  # Существующая база данных PostgreSQL
+  # Существующая БД PostgreSQL
   db:
     image: postgres:14.2
     hostname: postgres
