@@ -20,8 +20,8 @@ build:
     - tags
   script:
     - 'ls -la ~/.m2'
-    - 'cat ~/.m2/settings.xml'
-    - 'mvn --settings $MAVEN_SETTINGS compile'
+    - 'cat ~/.m2/settings-docker.xml'
+    - 'mvn --settings /root/.m2/settings-docker.xml compile'
   cache:
     paths:
       - ./target
