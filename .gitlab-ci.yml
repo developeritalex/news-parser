@@ -67,7 +67,7 @@ docker_push_dev_nexus:
   except:
     - tags
   before_script:
-    - echo "$DOCKER_DEV_PASS" | docker login localhost:8183 --username user --password-stdin
+    - echo "{\"auths\":{\"localhost:8183\":{\"username\":\"user\",\"password\":\"$DOCKER_DEV_PASS\"}}}" > ~/.docker/config.json
   script:
     - docker build --no-cache -f Dockerfile-dev -t localhost:8183/repository/nexus-docker-images:latest .
     - docker push localhost:8183/repository/nexus-docker-images:latest
