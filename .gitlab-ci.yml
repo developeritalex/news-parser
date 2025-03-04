@@ -18,6 +18,8 @@ build:
     - /^release\/.*$/
   except:
     - tags
+  before_script:
+    - export MAVEN_SETTINGS=/root/.m2/settings-docker.xml
   script:
     - 'mvn --settings $MAVEN_SETTINGS compile'
   cache:
