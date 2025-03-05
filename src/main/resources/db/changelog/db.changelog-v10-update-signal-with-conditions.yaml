@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: update-signal-with-conditions
+      author: alex-tufanov
+      changes:
+        - update:
+            schemaName: public
+            tableName: dbz_signal
+            columns:
+              - column:
+                  name: data
+                  value: '{"data-collections": ["public.outbox"], "additional-conditions":[{"data-collection": "public.outbox", "filter": "status=''FINISHED''"}]}'
+            where: "id = 'signal-2'"

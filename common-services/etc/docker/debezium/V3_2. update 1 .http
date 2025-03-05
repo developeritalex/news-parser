@@ -13,9 +13,9 @@ Content-Type: application/json
   "database.port": "5432",
   "database.user": "aleksandrtufanov",
   "database.password": "mysecretpassword",
-  "database.dbname" : "news",
+  "database.dbname": "news",
   "database.server.name": "postgres",
-  "table.include.list": "public.dbz_signal,public.dbz_heartbeat,custom.sport,custom.category", //
+  "table.include.list": "public.dbz_signal,public.dbz_heartbeat,public.outbox,public.newz",
 
   "topic.prefix": "pgsql.demo",
 
@@ -30,10 +30,10 @@ Content-Type: application/json
 
   "transforms.extractKeyField.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
   "transforms.extractKeyField.field": "id",
-  "transforms.extractKeyField.predicate": "isSportTable",
-  "predicates": "isSportTable",
-  "predicates.isSportTable.type": "org.apache.kafka.connect.transforms.predicates.TopicNameMatches",
-  "predicates.isSportTable.pattern": "pgsql.demo.custom.sport", //
+  "transforms.extractKeyField.predicate": "isOutboxTable",
+  "predicates": "isOutboxTable",
+  "predicates.isOutboxTable.type": "org.apache.kafka.connect.transforms.predicates.TopicNameMatches",
+  "predicates.isOutboxTable.pattern": "pgsql.demo.public.outbox",
 
   "publication.autocreate.mode": "filtered",
   "publication.name": "debezium_demo",
