@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-table-and-schema
+      author: alex-tufanov
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            schemaName: marketing
+            tableName: user
+      changes:
+        - dropTable:
+            schemaName: marketing
+            tableName: user
+        - sql:
+            dbms: postgresql
+            sql: DROP SCHEMA IF EXISTS marketing CASCADE;

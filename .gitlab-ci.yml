@@ -59,6 +59,7 @@ package:
       - ./target
       - ./.m2
 
+#Стадии ниже не работают. Исправить
 docker_push_dev_nexus:
   image: docker:20.10.7
   services:

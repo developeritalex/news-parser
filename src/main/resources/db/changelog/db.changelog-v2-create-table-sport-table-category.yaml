@@ -51,14 +51,12 @@ databaseChangeLog:
             schemaName: custom
             tableName: sport
             columns:
-              - column: { name: id, value: '1' }
               - column: { name: code, value: 'FOOTBALL' }
               - column: { name: status, value: 'OPENED' }
         - insert:
             schemaName: custom
             tableName: sport
             columns:
-              - column: { name: id, value: '2' }
               - column: { name: code, value: 'BASKETBALL' }
               - column: { name: status, value: 'FINISHED' }
 
