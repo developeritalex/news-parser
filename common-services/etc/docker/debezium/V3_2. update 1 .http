@@ -15,7 +15,7 @@ Content-Type: application/json
   "database.password": "mysecretpassword",
   "database.dbname" : "news",
   "database.server.name": "postgres",
-  "table.include.list": "public.dbz_signal,public.dbz_heartbeat,custom.sport,custom.category",
+  "table.include.list": "public.dbz_signal,public.dbz_heartbeat,custom.sport,custom.category", //
 
   "topic.prefix": "pgsql.demo",
 
@@ -33,7 +33,7 @@ Content-Type: application/json
   "transforms.extractKeyField.predicate": "isSportTable",
   "predicates": "isSportTable",
   "predicates.isSportTable.type": "org.apache.kafka.connect.transforms.predicates.TopicNameMatches",
-  "predicates.isSportTable.pattern": "pgsql.demo.custom.sport",
+  "predicates.isSportTable.pattern": "pgsql.demo.custom.sport", //
 
   "publication.autocreate.mode": "filtered",
   "publication.name": "debezium_demo",

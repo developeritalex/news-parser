@@ -7,13 +7,14 @@ stages:
 
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
+  MAVEN_SETTINGS: "/root/.m2/settings-docker.xml"
 
 image: maven:latest
 
 build:
   stage: build
   only:
-    - develop
+    - dev
     - merge_requests
     - /^release\/.*$/
   except:
@@ -28,7 +29,7 @@ build:
 test:
   stage: test
   only:
-    - develop
+    - dev
     - merge_requests
     - /^release\/.*$/
   except:
@@ -43,7 +44,7 @@ test:
 package:
   stage: package
   only:
-    - develop
+    - dev
     - /^release\/.*$/
   except:
     - tags
@@ -58,15 +59,18 @@ package:
       - ./target
       - ./.m2
 
+#Стадии ниже не работают. Исправить
 docker_push_dev_nexus:
   image: docker:20.10.7
+  services:
+    - docker:20.10.7-dind
   stage: save_nexus
   only:
-    - develop
+    - dev
   except:
     - tags
   before_script:
-    - echo "$DOCKER_DEV_PASS" | docker login localhost:8183 --username user --password-stdin
+    - echo "DEV_PASS" | docker login localhost:8183 --username user --password-stdin
   script:
     - docker build --no-cache -f Dockerfile-dev -t localhost:8183/repository/nexus-docker-images:latest .
     - docker push localhost:8183/repository/nexus-docker-images:latest
@@ -75,7 +79,7 @@ docker_push_dev_nexus:
 deploy_dev_server:
   stage: deploy
   only:
-    - develop
+    - dev
   except:
     - tags
   before_script:

@@ -19,3 +19,7 @@ databaseChangeLog:
       file: db/changelog/db.changelog-v5.0-insert-signal.yaml
   - include:
       file: db/changelog/db.changelog-v5.1-insert-signal-with-conditions.yaml
+  - include:
+      file: db/changelog/db.changelog-v6-drop-table-sport-table-category.yaml
+  - include:
+      file: db/changelog/db.changelog-v7-drop-table-user.yaml

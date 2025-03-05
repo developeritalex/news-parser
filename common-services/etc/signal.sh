@@ -3,6 +3,7 @@
 # В реальных проектах чаще всего отправка events именно через Kafka (с помощью этого скрипта),
 # а не DB, так как у разработчиков нет доступа к DB в продакшне.
 
+
 # Параметры Kafka
 BOOTSTRAP_SERVER="localhost:9092"
 TOPIC="pgsql.demo.kafka.signal"

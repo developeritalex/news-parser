@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-tables-and-schema
+      author: alex-tufanov
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            schemaName: custom
+            tableName: sport
+        - tableExists:
+            schemaName: custom
+            tableName: category
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableSchemaName: custom
+            baseTableName: category
+            constraintName: fk_category_sport
+        - dropTable:
+            schemaName: custom
+            tableName: category
+        - dropTable:
+            schemaName: custom
+            tableName: sport
+        - sql:
+            dbms: postgresql
+            sql: DROP SCHEMA IF EXISTS custom CASCADE;
