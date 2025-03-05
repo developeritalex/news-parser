@@ -10,7 +10,7 @@ TOPIC="pgsql.demo.kafka.signal"
 
 # Сообщение
 KEY="pgsql.demo"
-VALUE='{"type":"execute-snapshot", "data": {"data-collections": ["custom.category"], "type": "incremental"}}'
+VALUE='{"type":"execute-snapshot", "data": {"data-collections": ["public.outbox"], "type": "incremental"}}'
 
 # Отправка сообщения в Kafka
 echo "${KEY}:${VALUE}" | kafka-console-producer \

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: update-dbz-signal
+      author: alex-tufanov
+      changes:
+        - update:
+            schemaName: public
+            tableName: dbz_signal
+            columns:
+              - column:
+                  name: data
+                  value: '{"data-collections": ["public.outbox"]}'
+            where: "id = 'signal-1'"

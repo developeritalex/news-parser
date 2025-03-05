@@ -23,3 +23,9 @@ databaseChangeLog:
       file: db/changelog/db.changelog-v6-drop-table-sport-table-category.yaml
   - include:
       file: db/changelog/db.changelog-v7-drop-table-user.yaml
+  - include:
+      file: db/changelog/db.changelog-v8-replica-identity-full.yaml
+  - include:
+      file: db/changelog/db.changelog-v9-update-signal.yaml
+  - include:
+      file: db/changelog/db.changelog-v10-update-signal-with-conditions.yaml

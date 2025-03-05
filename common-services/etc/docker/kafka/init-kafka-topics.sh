@@ -1,9 +1,8 @@
 #!/bin/bash
 
 topics=(
-  pgsql.demo.marketing.user
-  pgsql.demo.custom.sport
-  pgsql.demo.custom.category
+  pgsql.demo.public.outbox
+  pgsql.demo.public.newz
 )
 
 for topic in "${topics[@]}"; do

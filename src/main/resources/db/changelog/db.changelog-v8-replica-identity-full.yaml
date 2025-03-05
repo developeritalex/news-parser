@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: replica-identity-full-table-outbox
+      author: alex-tufanov
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: alter table public.outbox replica identity full;
+
+  - changeSet:
+      id: replica-identity-full-table-newz
+      author: alex-tufanov
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: alter table public.newz replica identity full;
