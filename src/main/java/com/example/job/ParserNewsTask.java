@@ -36,7 +36,7 @@ public class ParserNewsTask {
     private final OutboxRepository outboxRepository;
 
     @Transactional
-    @Scheduled(fixedDelay = 3_600_000) //раз в час
+    @Scheduled(fixedDelay = 1_800_000) //раз в 30 мин
     public void parseAndSave() {
         try {
             Document doc = Jsoup
