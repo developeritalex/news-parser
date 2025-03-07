@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.example</groupId>
     <artifactId>news-parser</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>demo</name>
     <description>demo</description>
     <url/>
@@ -169,6 +169,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>com.example.NewsApplication</mainClass> <!-- для deploy на remote server -->
+                    <layout>JAR</layout> <!-- и это -->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
