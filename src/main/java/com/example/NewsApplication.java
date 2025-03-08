@@ -74,6 +74,4 @@ public class NewsApplication {
             return new DefaultOidcUser(authorities, oidcUser.getIdToken(), oidcUser.getUserInfo());
         };
     }
-
-
 }
