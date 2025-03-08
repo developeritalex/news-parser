@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -17,6 +18,7 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
 
 import java.io.IOException;
@@ -29,7 +31,7 @@ public class DebeziumAndKafkaStreams {
     static final Properties PROPERTIES = new Properties();
 
     static {
-        PROPERTIES.put(StreamsConfig.APPLICATION_ID_CONFIG, "demo-debezium-group");
+        PROPERTIES.put(StreamsConfig.APPLICATION_ID_CONFIG, "demo-debezium-group-2");
         PROPERTIES.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         PROPERTIES.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         PROPERTIES.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
@@ -116,24 +118,21 @@ public class DebeziumAndKafkaStreams {
             }
         }
 
-        public static final Serde<DebeziumMessage<NewsState>> DEBEZIUM_NEWS_SERDE =
-                Serdes.serdeFrom(
+        public static final Serde<DebeziumMessage<NewsState>> DEBEZIUM_NEWS_SERDE = Serdes.serdeFrom(
                         new JsonSerializer<NewsState>(),
                         new JsonDeserializer<>(NewsState.class)
-                );
+        );
 
         static final StreamsBuilder KAFKA_STREAM_BUILDER = new StreamsBuilder();
 
         static {
             Materialized<String, DebeziumMessage<DebeziumMessage.NewsState>, KeyValueStore<Bytes, byte[]>> store =
-                    Materialized.as("news-store");
+                    Materialized.as("news-state-store");
 
             KAFKA_STREAM_BUILDER
-                    .stream(
-                            "pgsql.demo.public.outbox",
-                            Consumed.with(Serdes.String(), DebeziumMessage.DEBEZIUM_NEWS_SERDE)
-                    )
-                    .foreach((key, value) -> log.info("Received news: {}", value));
+                    .stream("pgsql.demo.public.outbox", Consumed.with(Serdes.String(), DebeziumMessage.DEBEZIUM_NEWS_SERDE))
+                    .peek((key, value) -> log.info("RECEIVED NEWS: {}", value))
+                    .to("news-topic", Produced.with(Serdes.String(), DebeziumMessage.DEBEZIUM_NEWS_SERDE));
         }
     }
 }
