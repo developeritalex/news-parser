@@ -3,6 +3,7 @@ package com.example;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +28,7 @@ public class NewsApplication {
         SpringApplication.run(NewsApplication.class, args);
     }
 
+    @Profile("local")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
@@ -38,6 +40,7 @@ public class NewsApplication {
                 .build();
     }
 
+    @Profile("local")
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         var converter = new JwtAuthenticationConverter();
@@ -56,6 +59,7 @@ public class NewsApplication {
         return converter;
     }
 
+    @Profile("local")
     @Bean
     public OAuth2UserService<OidcUserRequest, OidcUser> oAuth2UserService() {
         var oidcUserService = new OidcUserService();
