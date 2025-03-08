@@ -31,7 +31,7 @@ public class DebeziumAndKafkaStreams {
     static final Properties PROPERTIES = new Properties();
 
     static {
-        PROPERTIES.put(StreamsConfig.APPLICATION_ID_CONFIG, "demo-debezium-group-2");
+        PROPERTIES.put(StreamsConfig.APPLICATION_ID_CONFIG, "debezium-group");
         PROPERTIES.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         PROPERTIES.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         PROPERTIES.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
@@ -126,8 +126,7 @@ public class DebeziumAndKafkaStreams {
         static final StreamsBuilder KAFKA_STREAM_BUILDER = new StreamsBuilder();
 
         static {
-            Materialized<String, DebeziumMessage<DebeziumMessage.NewsState>, KeyValueStore<Bytes, byte[]>> store =
-                    Materialized.as("news-state-store");
+            Materialized<String, DebeziumMessage<DebeziumMessage.NewsState>, KeyValueStore<Bytes, byte[]>> store = Materialized.as("news-state-store");
 
             KAFKA_STREAM_BUILDER
                     .stream("pgsql.demo.public.outbox", Consumed.with(Serdes.String(), DebeziumMessage.DEBEZIUM_NEWS_SERDE))
