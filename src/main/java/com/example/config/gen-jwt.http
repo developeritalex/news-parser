@@ -1,4 +1,5 @@
-POST http://localhost:8180/realms/my-realm-project/protocol/openid-connect/token
+### localhost or keycloak
+POST http://localhost:8080/realms/my-realm-project/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
-client_id=springsecurity&client_secret=TPy1TWPpCUYDmJDv76vrFICeD0TwrrwG&username=alex.tru25&password=pass&grant_type=password
+client_id=springsecurity&client_secret=Zqbwmc2pqW5IPZ93GmrPAbEC3CPa2PJ1&username=alex.tru25&password=password&grant_type=password
