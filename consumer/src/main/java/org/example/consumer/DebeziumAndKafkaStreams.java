@@ -104,7 +104,7 @@ public class DebeziumAndKafkaStreams {
                 }
                 try {
                     String jsonData = new String(data, StandardCharsets.UTF_8);
-                    log.info("Deserializing JSON: {}", jsonData);
+                    //log.info("DESERIALIZING JSON: {}", jsonData);
 
                     return objectMapper.readValue(data,
                             objectMapper.getTypeFactory().constructParametricType(
