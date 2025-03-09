@@ -63,6 +63,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+    networks:
+      - keycloak-network
 
   # Добавляем Kafka
   kafka:
@@ -88,6 +90,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    networks:
+      - keycloak-network
 
   init-kafka:
     image: confluentinc/cp-kafka:7.2.1
@@ -99,6 +103,8 @@ services:
     volumes:
       - ./common-services/etc/docker/kafka/init-kafka-topics.sh:/init-kafka-topics.sh
     command: /init-kafka-topics.sh
+    networks:
+      - keycloak-network
 
   # Добавляем Kafka UI для мониторинга
   kafka-ui:
@@ -114,6 +120,8 @@ services:
       DYNAMIC_CONFIG_ENABLED: true
     volumes:
       - ./common-services/etc/docker/kafka/config.yml:/etc/kafkaui/dynamic_config.yaml
+    networks:
+      - keycloak-network
 
   # Добавляем Kafka Connect с Debezium
   kafka-connect:
@@ -145,6 +153,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    networks:
+      - keycloak-network
 
   # Добавляем Prometheus
   prometheus:
@@ -158,6 +168,8 @@ services:
         condition: service_healthy
     volumes:
       - ./common-services/etc/docker/debezium-prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - keycloak-network
 
   # Добавляем Grafana
   grafana:
@@ -169,6 +181,8 @@ services:
       - "3000:3000"
     environment:
       - DS_PROMETHEUS=prometheus
+    networks:
+      - keycloak-network
 
 networks:
   keycloak-network:
